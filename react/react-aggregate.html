@@ -67,7 +67,7 @@
 
         return React.createElement(
           "p",
-          { style: { width: matches ? "50%" : "100%" } },
+          { id: props.id, style: getStyle(matches) },
           props.children
         );
       }
