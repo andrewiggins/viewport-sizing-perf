@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React individual listeners</title>
+  </head>
+  <body>
+    <h1>React Listeners</h1>
+    <div id="root"></div>
+    <script
+      src="https://unpkg.com/react/umd/react.profiling.min.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom/umd/react-dom.profiling.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="module">
+      import { App, matcher, getStyle } from "./lib-react.js";
+
+      const root = document.getElementById("root");
+      const defaultMatches = matcher.matches;
+
+      let applyingStyle = false;
+      function ListenerParagraph(props) {
+        const [matches, setMatches] = React.useState(defaultMatches);
+        React.useEffect(() => {
+          const onMediaChange = (e) => {
+            if (!applyingStyle) {
+              applyingStyle = true;
+              performance.mark("start");
+
+              requestAnimationFrame(() => {
+                applyingStyle = false;
+                let entry = performance.measure("duration", "start");
+                window.parent.postMessage(entry.duration);
+              });
+            }
+
+            setMatches(e.matches);
+          };
+
+          matcher.addEventListener("change", onMediaChange);
+          return () => {
+            matcher.removeEventListener("change", onMediaChange);
+          };
+        }, []);
+
+        return React.createElement(
+          "p",
+          { id: props.id, style: getStyle(matches) },
+          props.children
+        );
+      }
+
+      ReactDOM.render(
+        React.createElement(App, { Paragraph: ListenerParagraph }),
+        root
+      );
+    </script>
+  </body>
+</html>

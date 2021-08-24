@@ -1,10 +1,19 @@
 {
   "$schema": "https://raw.githubusercontent.com/Polymer/tachometer/master/config.schema.json",
+  "sampleSize": 25,
   "benchmarks": [
     {
       "measurement": "global",
       "measurementExpression": "window.duration",
       "expand": [
+        {
+          "name": "react-listeners",
+          "url": "http://localhost:5000/runner.html?react-listeners"
+        },
+        {
+          "name": "react-aggregate",
+          "url": "http://localhost:5000/runner.html?react-aggregate"
+        },
         {
           "name": "listeners",
           "url": "http://localhost:5000/runner.html?listeners"

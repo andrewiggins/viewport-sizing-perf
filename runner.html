@@ -8,9 +8,17 @@
   </head>
   <body>
     <script type="module">
-      let url = "/listeners.html";
-      if (location.search.includes("aggregate")) {
-        url = "/aggregate.html";
+      const query = location.search;
+
+      let url;
+      if (query.includes("react-aggregate")) {
+        url = "/react/react-aggregate.html";
+      } else if (query.includes("react-listeners")) {
+        url = "/react/react-listeners.html";
+      } else if (query.includes("aggregate")) {
+        url = "/vanilla/aggregate.html";
+      } else {
+        url = "/vanilla/listeners.html";
       }
 
       let duration;
@@ -25,7 +33,7 @@
         new Promise((resolve) => setTimeout(resolve, ms));
 
       async function go() {
-        await wait();
+        await wait(500);
         w.resizeTo(480, 300);
         await wait();
         w.close();

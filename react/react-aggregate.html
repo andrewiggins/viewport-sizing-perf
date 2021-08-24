@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React aggregate listeners</title>
+  </head>
+  <body>
+    <h1>React Aggregate</h1>
+    <div id="root"></div>
+    <script
+      src="https://unpkg.com/react/umd/react.profiling.min.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom/umd/react-dom.profiling.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="module">
+      import { App, matcher, getStyle } from "./lib-react.js";
+
+      class MediaObservable {
+        constructor() {
+          this.subscribers = [];
+        }
+
+        getCurrentValue() {
+          return matcher.matches;
+        }
+
+        subscribe(listener) {
+          this.subscribers.push(listener);
+          if (this.subscribers.length === 1) {
+            matcher.addEventListener("change", this.emitChange);
+          }
+
+          return () => {
+            this.subscribers.splice(this.subscribers.indexOf(listener), 1);
+            if (this.subscribers.length === 0) {
+              matcher.removeEventListener("change", this.emitChange);
+            }
+          };
+        }
+
+        emitChange = (e) => {
+          performance.mark("start");
+          requestAnimationFrame(() => {
+            let entry = performance.measure("duration", "start");
+            window.parent.postMessage(entry.duration);
+          });
+
+          ReactDOM.unstable_batchedUpdates(() => {
+            this.subscribers.forEach((cb) => cb(e.matches));
+          });
+        };
+      }
+
+      const mediaObservable = new MediaObservable();
+
+      function AggregateParagraph(props) {
+        const [matches, setMatches] = React.useState(
+          mediaObservable.getCurrentValue()
+        );
+        React.useEffect(() => {
+          return mediaObservable.subscribe(setMatches);
+        }, []);
+
+        return React.createElement(
+          "p",
+          { style: { width: matches ? "50%" : "100%" } },
+          props.children
+        );
+      }
+
+      ReactDOM.render(
+        React.createElement(App, { Paragraph: AggregateParagraph }),
+        root
+      );
+    </script>
+  </body>
+</html>
