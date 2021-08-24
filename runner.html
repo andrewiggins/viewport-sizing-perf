@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benchmark runner</title>
+  </head>
+  <body>
+    <script type="module">
+      let url = "/listeners.html";
+      if (location.search.includes("aggregate")) {
+        url = "/aggregate.html";
+      }
+
+      let duration;
+      let w = window.open(url, "", "width=640, height=300");
+      w.addEventListener("message", (e) => {
+        if (typeof e.data == "number") {
+          duration = e.data;
+        }
+      });
+
+      const wait = (ms = 250) =>
+        new Promise((resolve) => setTimeout(resolve, ms));
+
+      async function go() {
+        await wait();
+        w.resizeTo(480, 300);
+        await wait();
+        w.close();
+        await wait();
+        window.duration = duration;
+      }
+
+      go();
+    </script>
+  </body>
+</html>

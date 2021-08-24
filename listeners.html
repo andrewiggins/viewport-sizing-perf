@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Individual listeners</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module">
+      import { makeContent, applyStyle, matcher } from "./lib.js";
+
+      const root = document.getElementById("root");
+      /** @type {HTMLParagraphElement[]} */
+      const content = makeContent(root);
+
+      let applyingStyle = false;
+      for (let p of content) {
+        matcher.addEventListener("change", (e) => {
+          if (!applyingStyle) {
+            applyingStyle = true;
+            performance.mark("start");
+
+            requestAnimationFrame(() => {
+              applyingStyle = false;
+              let entry = performance.measure("duration", "start");
+              window.parent.postMessage(entry.duration);
+            });
+          }
+          applyStyle(p, e.matches);
+        });
+      }
+    </script>
+  </body>
+</html>

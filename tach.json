@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Polymer/tachometer/master/config.schema.json",
+  "benchmarks": [
+    {
+      "measurement": "global",
+      "measurementExpression": "window.duration",
+      "expand": [
+        {
+          "name": "listeners",
+          "url": "http://localhost:5000/runner.html?listeners"
+        },
+        {
+          "name": "aggregate",
+          "url": "http://localhost:5000/runner.html?aggregate"
+        }
+      ]
+    }
+  ]
+}
