@@ -11,7 +11,11 @@
       const query = location.search;
 
       let url;
-      if (query.includes("react-aggregate")) {
+      if (query.includes("viewport-calculated")) {
+        url = "/viewport-types/calculated-value.html";
+      } else if (query.includes("viewport-cached")) {
+        url = "/viewport-types/cached-value.html";
+      } else if (query.includes("react-aggregate")) {
         url = "/react/react-aggregate.html";
       } else if (query.includes("react-listeners")) {
         url = "/react/react-listeners.html";

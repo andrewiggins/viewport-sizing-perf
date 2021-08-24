@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cached value + aggregate listeners</title>
+  </head>
+  <body>
+    <h1>Cached value + aggregate listeners</h1>
+    <div id="root"></div>
+    <script
+      src="https://unpkg.com/react/umd/react.profiling.min.js"
+      type="text/javascript"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom/umd/react-dom.profiling.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="module">
+      import {
+        App,
+        getStyle,
+        MatchMediaViewportTypeObservable,
+      } from "./viewport-lib.js";
+      import { useSubscription } from "./use-subscription.js";
+
+      const useCachedValue = true;
+      const mediaObservable = new MatchMediaViewportTypeObservable(
+        useCachedValue
+      );
+
+      function CachedParagraph(props) {
+        const viewportType = useSubscription(mediaObservable);
+
+        return React.createElement(
+          "p",
+          { style: getStyle(viewportType) },
+          props.children
+        );
+      }
+
+      ReactDOM.render(
+        React.createElement(App, { Paragraph: CachedParagraph }),
+        root
+      );
+    </script>
+  </body>
+</html>

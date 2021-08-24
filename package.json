@@ -6,7 +6,7 @@
   "scripts": {
     "start": "run-p serve bench",
     "serve": "sirv -q --dev .",
-    "bench": "timeout 2 && tachometer --config tach.json"
+    "bench": "timeout 2 && tachometer --config viewport-bench-config.json"
   },
   "author": "",
   "license": "ISC",

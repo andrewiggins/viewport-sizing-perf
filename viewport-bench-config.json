@@ -1,0 +1,21 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Polymer/tachometer/master/config.schema.json",
+  "sampleSize": 50,
+  "timeout": 1,
+  "benchmarks": [
+    {
+      "measurement": "global",
+      "measurementExpression": "window.duration",
+      "expand": [
+        {
+          "name": "viewport-calculated",
+          "url": "http://localhost:5000/runner.html?viewport-calculated"
+        },
+        {
+          "name": "viewport-cached",
+          "url": "http://localhost:5000/runner.html?viewport-cached"
+        }
+      ]
+    }
+  ]
+}
